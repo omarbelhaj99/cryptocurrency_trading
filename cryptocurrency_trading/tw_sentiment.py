@@ -33,23 +33,7 @@ def resampling(df,start_date):
 
     return resampled_df
 
-
-
-
-
-def get_tweets_sentimentscore(resampled_df):
-
-    def preprocess(text):
-        new_text = []
-
-
-        for t in text.split(" "):
-            t = '@user' if t.startswith('@') and len(t) > 1 else t
-            t = 'http' if t.startswith('http') else t
-            new_text.append(t)
-        return " ".join(new_text)
-
-
+def download_model():
     task='sentiment'
     MODEL = f"cardiffnlp/twitter-roberta-base-{task}"
 
@@ -66,11 +50,27 @@ def get_tweets_sentimentscore(resampled_df):
     # PT
     model = AutoModelForSequenceClassification.from_pretrained(MODEL)
     model.save_pretrained(MODEL)
+    return 'model downloaded'
 
+
+
+
+
+def get_tweets_sentimentscore(resampled_df):
+
+    def preprocess(text):
+        new_text = []
+
+
+        for t in text.split(" "):
+            t = '@user' if t.startswith('@') and len(t) > 1 else t
+            t = 'http' if t.startswith('http') else t
+            new_text.append(t)
+        return " ".join(new_text)
 
     def sentimentscore(text):
 
-            # text = "Good night 😊"
+        # text = "Good night 😊"
         text = preprocess(text)
         encoded_input = tokenizer(text, return_tensors='pt')
         output = model(**encoded_input)
