@@ -67,6 +67,22 @@ def macd(df):
     macd = exp1 - exp2
     return macd
 
+def all_tech_analysis(data):
+    EMA200D = EWMA(data, 200)
+    EMA20D = EWMA(data, 20)
+    BBANDS = BBANDS(data,50)
+    rsi = rsi(data)
+    volatility = volatility(data,14)
+    macd = macd(data)
+    data['EMA200D'] = EMA200D
+    data['EMA20D'] = EMA20D
+    data['BBANDS'] = BBANDS
+    data['rsi'] = rsi
+    data['volatility'] = volatility
+    data['macd'] = macd 
+    return data
+
+
 if __name__ == '___main__':
     EMA200D = EWMA(data, 200)
     EMA20D = EWMA(data, 20)
