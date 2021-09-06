@@ -25,7 +25,7 @@ def scrape_tweets(start, end, token):
     end = dt_range['date'].iloc[-1].strftime("%Y-%m-%dT%H:%M:%SZ")
 
     results = []
-    for idx in tqdm(dt_range.index[291:]):
+    for idx in tqdm(dt_range.index):
         start = dt_range['date'].iloc[idx].strftime("%Y-%m-%dT%H:%M:%SZ")
         if idx == dt_range.index[-1]:
             end = (datetime.utcnow()-pd.Timedelta(seconds=60)).strftime("%Y-%m-%dT%H:%M:%SZ")
