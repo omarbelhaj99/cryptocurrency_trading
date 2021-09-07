@@ -35,3 +35,4 @@ torch
 
 # For frontend
 PIL
+urllib2
