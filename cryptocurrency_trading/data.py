@@ -23,12 +23,21 @@ def get_price_data():
     return df3years
 
 
-def get_all_data():
-
+def get_all_data(start_date,end_date,token):
+    start=start_date
+    end=end_date
     df = get_price_data()
     reddit_data = all_reddit(start_date, end_date)
     tech_data = all_tech_analysis(df)
-
-    start=start_date
-    end=end_date
     twitter_data=get_sentiment_and_count(start,end,token)
+    final_data = pd.merge(twitter_data,
+                          tech_data,
+                          how='left',
+                          left_on='start',
+                          right_on='date')
+    final_data = pd.merge(final_data,
+                          reddit_data,
+                          how='left',
+                          left_on='start',
+                          right_on='date')
+    return final_data
