@@ -1,5 +1,6 @@
 from red_sentiment import all_reddit
 from technical_analysis import all_tech_analysis
+from tw_sentiment import get_sentiment_and_count
 import pandas as pd
 import requests
 
@@ -24,7 +25,6 @@ def get_all_data():
     reddit_data = all_reddit(start_date, end_date)
     tech_data = all_tech_analysis(df)
 
-
-
-
-
+    start=start_date
+    end=end_date
+    twitter_data=get_sentiment_and_count(start,end,token)
