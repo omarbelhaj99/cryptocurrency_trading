@@ -1,9 +1,13 @@
+from posix import environ
+import pandas as pd
+import requests
+import os
+from os import environ
+from dotenv import dotenv_values
+
 from red_sentiment import all_reddit
 from technical_analysis import all_tech_analysis
 from tw_sentiment import get_sentiment_and_count
-import pandas as pd
-import requests
-
 
 def get_price_data():
     env_variables = dotenv_values(".env")
