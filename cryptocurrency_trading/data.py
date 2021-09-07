@@ -9,6 +9,7 @@ from red_sentiment import all_reddit
 from technical_analysis import all_tech_analysis
 from tw_sentiment import get_sentiment_and_count
 
+
 def get_price_data():
     env_variables = dotenv_values(".env")
     api_key = env_variables['FINANCIAL_MODELLING_API_KEY']
@@ -23,13 +24,13 @@ def get_price_data():
     return df3years
 
 
-def get_all_data(start_date,end_date,token):
+def get_all_data(start_date,end_date):
     start=start_date
     end=end_date
     df = get_price_data()
     reddit_data = all_reddit(start_date, end_date)
     tech_data = all_tech_analysis(df)
-    twitter_data=get_sentiment_and_count(start,end,token)
+    twitter_data=get_sentiment_and_count(start,end)
     final_data = pd.merge(twitter_data,
                           tech_data,
                           how='left',
