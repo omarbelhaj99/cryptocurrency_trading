@@ -36,7 +36,7 @@ def scrape_tweets(start, end, token):
         "query":'bitcoin',
         "start_time":f"{start}",
         "end_time":f"{end}",
-        "max_results":100
+        "max_results":5
         }
 
         error_counter = 0
@@ -77,22 +77,21 @@ def get_tweets_count(start, end, token):
     header = {"Authorization": f"Bearer {token}"}
 
     results = []
-    counter = 0
     for i in tqdm(range(0, len(dt_range), 30)):
         start = dt_range['date'].iloc[i].strftime("%Y-%m-%dT%H:%M:%SZ")
         if i+29 < len(dt_range):
             end = dt_range['date'].iloc[i+29].strftime("%Y-%m-%dT%H:%M:%SZ")
         else:
             end = (datetime.utcnow()-pd.Timedelta(seconds=60)).strftime("%Y-%m-%dT%H:%M:%SZ")
-    params = {
-        "query":'bitcoin',
-        "start_time":f"{start}",
-        "end_time":f"{end}",
-        "granularity":'day'
-        }
-    response = requests.get(url, headers = header, params = params)
-    results.append(pd.DataFrame(response.json()['data']))
-    time.sleep(.5)
+        params = {
+            "query":'bitcoin',
+            "start_time":f"{start}",
+            "end_time":f"{end}",
+            "granularity":'day'
+            }
+        response = requests.get(url, headers = header, params = params)
+        results.append(pd.DataFrame(response.json()['data']))
+        time.sleep(.5)
 
     df_count = pd.concat(results, axis = 0).reset_index(drop = True)
     df_count['tweet_count'] = df_count['tweet_count'].astype(int)
