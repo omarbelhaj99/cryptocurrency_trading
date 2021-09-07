@@ -17,9 +17,15 @@ import os
 import requests
 from tqdm.notebook import tqdm
 import time
+from dotenv import load_dotenv
+
+
+
 
 ##
-def scrape_tweets(start, end, token):
+def scrape_tweets(start, end):
+    load_dotenv('.env')
+    token=os.getenv('tw_api')
     dt_range = pd.date_range(start=start, end=end)
     dt_range = pd.DataFrame(dt_range, columns=['date'])
 
@@ -71,7 +77,9 @@ def scrape_tweets(start, end, token):
 #scrapping tweets_count
 
 
-def get_tweets_count(start, end, token):
+def get_tweets_count(start, end):
+    load_dotenv('.env')
+    token=os.getenv('tw_api')
     dt_range = pd.date_range(start=start, end=end)
     dt_range = pd.DataFrame(dt_range, columns=['date'])
 
@@ -219,11 +227,11 @@ def get_tweets_sentimentscore(df):
     return df
 
 
-def get_sentiment_and_count(start, end, token):
-    df= scrape_tweets(start,end,token)
+def get_sentiment_and_count(start, end):
+    df= scrape_tweets(start,end)
     df= get_tweets_sentimentscore(df)
 
-    df1 = get_tweets_count(start, end, token)
+    df1 = get_tweets_count(start, end)
     df1['start'] = pd.to_datetime(df1['start']).dt.strftime('%Y-%m-%d')
 
     results = pd.merge(df, df1, how='left', on='start')
