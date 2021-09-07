@@ -32,3 +32,6 @@ termcolor
 pmaw
 transformers
 torch
+
+# For frontend
+PIL
