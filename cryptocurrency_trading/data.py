@@ -5,20 +5,22 @@ import os
 from os import environ
 from dotenv import dotenv_values
 
-from red_sentiment import all_reddit
-from technical_analysis import all_tech_analysis
-from tw_sentiment import get_sentiment_and_count
+from cryptocurrency_trading.red_sentiment import all_reddit
+from cryptocurrency_trading.technical_analysis import all_tech_analysis
+from cryptocurrency_trading.tw_sentiment import get_sentiment_and_count
 
 
 def get_price_data():
-    env_variables = dotenv_values(".env")
-    api_key = env_variables['FINANCIAL_MODELLING_API_KEY']
+    # env_variables = dotenv_values(".env")
+    # print(env_variables)
+    api_key = 'a58413697e8263de9c95cab92049ea3f'
+    # api_key = env_variables['FINANCIAL_MODELLING_API_KEY']
     symbol='BTCUSD'
     query=f'https://financialmodelingprep.com/api/v3/historical-price-full/{symbol}?apikey={api_key}'
     response=requests.get(query)
     df = pd.DataFrame(response.json()['historical'])
     df['date'] = pd.to_datetime(df['date'])
-    df_2 = df[['date', 'adjClose']]
+    df_2 = df[['date', 'adjClose','volume']]
     date = pd.to_datetime('2018-09-01')
     df3years = df_2[df_2['date']>date]
     return df3years
@@ -34,6 +36,12 @@ def get_all_data(start_date,end_date):
     twitter_data=get_sentiment_and_count(start,end)
     results=pd.merge(reddit_data,twitter_data,left_on='date',right_on='start').copy().drop('start',axis=1)
     final=pd.merge(results,tech_data, how='inner').copy()
+    final = final[[
+        'date', 'adjClose', 'tweet_count', 'sentimentscore', 'volume',
+        'volatility', 'rsi', 'macd', 'real_score', 'post_per_day'
+    ]]
+    final.columns= ['start','close_price','tweet_count','twitter_sentiment',
+    'volume','volatility','rsi','macd', 'reddit_sentiment','reddit_post_count']
 
     ##UPDATED DON'T CHANGE
     return final
