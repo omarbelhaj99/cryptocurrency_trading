@@ -114,7 +114,7 @@ def all_reddit(start, end):
     df_useful_only = useful_only(df_sample)
     df_sentiment_analysis = create_preddiction(list(df_useful_only['text']))
     df_final = merge_sentiment_date(df_sentiment_analysis, df_useful_only, count_df)
-    df_final.to_csv('../raw_data/reddit_sentiment_n_posts.csv')
+    #df_final.to_csv('../raw_data/reddit_sentiment_n_posts.csv')
     return df_final
 
 if __name__ == '__main__':
