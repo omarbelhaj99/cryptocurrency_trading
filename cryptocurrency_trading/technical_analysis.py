@@ -6,22 +6,22 @@ import pandas as pd
 
 # Simple Moving Average
 def SMA(data, ndays):
-    SMA = pd.Series(data['close'].rolling(ndays).mean(), name='SMA')
+    SMA = pd.Series(data['adjClose'].rolling(ndays).mean(), name='SMA')
     return SMA
 
 
 # Exponentially-weighted Moving Average
 def EWMA(data, ndays):
-    EMA = pd.Series(data['close'].ewm(span=ndays,
+    EMA = pd.Series(data['adjClose'].ewm(span=ndays,
                                       min_periods=ndays - 1).mean(),
                     name='EWMA_' + str(ndays))
     return EMA
 
 
 # Compute the Bollinger Bands
-def BBANDS(data, window=n):
-    MA = data.close.rolling(window=n).mean()
-    SD = data.close.rolling(window=n).std()
+def BBANDS(data, window=50):
+    MA = data.adjClose.rolling(window).mean()
+    SD = data.adjClose.rolling(window).std()
     data['UpperBB'] = MA + (2 * SD)
     data['LowerBB'] = MA - (2 * SD)
     return data
@@ -32,7 +32,7 @@ def rsi(df, periods=14, ema=True):
     """
     Returns a pd.Series with the relative strength index.
     """
-    close_delta = df['close'].diff()
+    close_delta = df['adjClose'].diff()
 
     # Make two series: one for lower closes and one for higher closes
     up = close_delta.clip(lower=0)
@@ -56,37 +56,38 @@ def rsi(df, periods=14, ema=True):
 
 # volatility is the 14 days standard deviation
 def volatility(df, n):
-    volatil = df.close.rolling(n).std(ddof=0)
+    volatil = df.adjClose.rolling(n).std(ddof=0)
     return volatil
 
 # Moving average convergence divergence (MACD)
 def macd(df):
-    exp1 = df.close.ewm(span=12, adjust=False).mean()
-    exp2 = df.close.ewm(span=26, adjust=False).mean()
-    exp3 = df.close.ewm(span=9, adjust=False).mean()
+    exp1 = df.adjClose.ewm(span=12, adjust=False).mean()
+    exp2 = df.adjClose.ewm(span=26, adjust=False).mean()
+    exp3 = df.adjClose.ewm(span=9, adjust=False).mean()
     macd = exp1 - exp2
     return macd
 
 def all_tech_analysis(data):
     EMA200D = EWMA(data, 200)
     EMA20D = EWMA(data, 20)
-    BBANDS = BBANDS(data,50)
-    rsi = rsi(data)
-    volatility = volatility(data,14)
-    macd = macd(data)
+    BBANDS_var = BBANDS(data,50)
+    rsi_var = rsi(data)
+    volatility_var = volatility(data,14)
+    macd_var = macd(data)
     data['EMA200D'] = EMA200D
     data['EMA20D'] = EMA20D
-    data['BBANDS'] = BBANDS
-    data['rsi'] = rsi
-    data['volatility'] = volatility
-    data['macd'] = macd 
+    # data['LowerBB']
+    # data['BBANDS'] = BBANDS_var
+    data['rsi'] = rsi_var
+    data['volatility'] = volatility_var
+    data['macd'] = macd_var
     return data
 
 
-if __name__ == '___main__':
-    EMA200D = EWMA(data, 200)
-    EMA20D = EWMA(data, 20)
-    BBANDS = BBANDS(data,50)
-    rsi = rsi(data)
-    volatility = volatility(data,14)
-    macd = macd(data)
+# if __name__ == '___main__':
+#     EMA200D = EWMA(data, 200)
+#     EMA20D = EWMA(data, 20)
+#     BBANDS = BBANDS(data,50)
+#     rsi = rsi(data)
+#     volatility = volatility(data,14)
+#     macd = macd(data)

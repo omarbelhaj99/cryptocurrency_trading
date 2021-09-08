@@ -28,8 +28,9 @@ def get_all_data(start_date,end_date):
     start=start_date
     end=end_date
     df = get_price_data()
+    df_sorted = df.sort_values(by = ['date'])
     reddit_data = all_reddit(start_date, end_date)
-    tech_data = all_tech_analysis(df)
+    tech_data = all_tech_analysis(df_sorted)
     twitter_data=get_sentiment_and_count(start,end)
     final_data = pd.merge(twitter_data,
                           tech_data,
