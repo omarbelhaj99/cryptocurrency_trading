@@ -175,15 +175,15 @@ app.run()
 
 
 
-CSS = """
-h1 {
-    color: red;
-}
+# CSS = """
+# h1 {
+#     color: red;
+# }
 
-"""
+# """
 
-if st.checkbox('Inject CSS'):
-    st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
+# if st.checkbox('Inject CSS'):
+#     st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
 
 # df = pd.DataFrame({
 #           'first column': list(range(1, 11)),
