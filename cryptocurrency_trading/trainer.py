@@ -7,22 +7,66 @@ import IPython
 import IPython.display
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from data import get_all_data
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import tensorflow as tf
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+from tensorflow.keras import models
 
 
-
-
-
+### Functions required:
 
 ##impute
 def imputer(df):
     imputer = KNNImputer(n_neighbors=2)
     df['reddit_sentiment'],df['reddit_post_count'],df['twitter_sentiment'] = imputer.fit_transform(df[['reddit_sentiment','reddit_post_count','twitter_sentiment']]).T
     return df
+
+def standardize_full_df(df, mean, std):
+    df = (df - mean) / std
+    return df
+
+##create target
+def create_predict_dataset(sequence_length, df):
+    df['target'] = df['close_price'].shift(-sequence_length)
+    df.drop('start', axis = 1, inplace = True)
+    df.dropna()
+    X = df.drop('target', axis = 1)
+    y = df['target']
+    dataset = tf.keras.preprocessing.timeseries_dataset_from_array(
+                X, y, sequence_length=10, batch_size = 16)
+    return X, dataset
+
+def prepare_data(start_date,end_date, mean, std):
+    sequence_length = 7
+    df = get_all_data(start_date,end_date)
+    imputed_df = imputer(df)
+    standard_df = standardize_full_df(imputed_df, mean, std)
+    X_pred, dataset_predict = create_predict_dataset(sequence_length, standard_df)
+    return dataset_predict
+
+# Create a prediction
+def predict_price(start_date,end_date):
+    path_to_model = "lstm_gru_7_9"
+    mean = -7.65705661641187e-05
+    standard_deviation = 0.06080495335661146
+    dataset_predict = prepare_data(start_date,end_date, mean, standard_deviation)
+    loaded_model = models.load_model(path_to_model)
+    y_pred = loaded_model.predict(dataset_predict)
+    y = y_pred*standard_deviation+mean
+    price_up = 0
+    if y > 0:
+        price_up = 1
+    return y, price_up
+
+
+
+
+
+##################################### USELESS? ###############################################
+#### Don't think we need this 
 
 ##train_test_split
 def train_test_split(df):
@@ -36,15 +80,17 @@ def train_test_split(df):
     num_features = df.shape[1]
     return train_df,val_df,test_df,num_features
 
-def standardize(train_df,df):
+def standardize(train_df,df,val_df,test_df):
 
     train_mean=train_df[['tweet_count','twitter_sentiment','volume','volatility','rsi','macd','reddit_sentiment','reddit_post_count']].mean()
     train_std=train_df[['tweet_count','twitter_sentiment','volume','volatility','rsi','macd','reddit_sentiment','reddit_post_count']].std()
-    df[['tweet_count','twitter_sentiment','volume','volatility','rsi','macd','reddit_sentiment','reddit_post_count']]=(df[['tweet_count','twitter_sentiment','volume','volatility','rsi','macd','reddit_sentiment','reddit_post_count']]-train_mean)/train_std
-    return df
+    #df[['tweet_count','twitter_sentiment','volume','volatility','rsi','macd','reddit_sentiment','reddit_post_count']]=(df[['tweet_count','twitter_sentiment','volume','volatility','rsi','macd','reddit_sentiment','reddit_post_count']]-train_mean)/train_std
+    train_df[['tweet_count','twitter_sentiment','volume','volatility','rsi','macd','reddit_sentiment','reddit_post_count']]=(train_df[['tweet_count','twitter_sentiment','volume','volatility','rsi','macd','reddit_sentiment','reddit_post_count']]-train_mean)/train_std
+    val_df[['tweet_count','twitter_sentiment','volume','volatility','rsi','macd','reddit_sentiment','reddit_post_count']]=(val_df[['tweet_count','twitter_sentiment','volume','volatility','rsi','macd','reddit_sentiment','reddit_post_count']]-train_mean)/train_std
+    test_df[['tweet_count','twitter_sentiment','volume','volatility','rsi','macd','reddit_sentiment','reddit_post_count']]=(test_df[['tweet_count','twitter_sentiment','volume','volatility','rsi','macd','reddit_sentiment','reddit_post_count']]-train_mean)/train_std
 
+    return train_df, val_df, test_df
 
-##create target
 
 def create_train_dataset(sequence_length,train_df):
     train_df['target'] = train_df['close_price'].shift(-sequence_length)
@@ -77,9 +123,8 @@ def create_val_dataset(sequence_length,val_df):
     return dataset_val
 
 
-##train model
-
-def model_setup():
+##Won't the model come from saved file?
+def model_setup(dataset, dataset_val, dataset_test):
     lstm_model = tf.keras.models.Sequential([
     # Shape [batch, time, features] => [batch, time, lstm_units]
     tf.keras.layers.GRU(50, return_sequences=True),
@@ -95,8 +140,7 @@ def model_setup():
     es = EarlyStopping(patience = 20, restore_best_weights=True)
     reduce_lr = ReduceLROnPlateau(patience = 15)
     lstm_model.fit(dataset, validation_data = dataset_val, epochs = 2_000, callbacks = [es, reduce_lr])
-
-
-
+    evaluation = lstm_model.evaluate(dataset_test)
     ##save model? model performance???
-    return lstm_model.evaluate(dataset_test)
+    return lstm_model, evaluation
+
