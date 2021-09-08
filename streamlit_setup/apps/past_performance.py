@@ -59,7 +59,7 @@ def get_earnings(investment, earnings,start):
     st.line_chart(plot_)
     our_return = earnings[earnings['buy_sell']]['pct'].prod()
     market_return = earnings['pct'].prod()
-    extra = our_return*investment - market_return*investment
+    extra = ((our_return/100)+1)*investment #- ((market_return/100)+1)*investment
     
     st.write("""
         <style>
@@ -69,7 +69,7 @@ def get_earnings(investment, earnings,start):
         </style>
         """, unsafe_allow_html=True)
 
-    st.write(f'If you used our model you will get a return of {our_return}%, instead of just holding it, which would have given you a return of {market_return}%, making you an extra .....:')
+    st.write(f'If you used our model you will get a return of {round(our_return,2)}%, instead of just holding it, which would have given you a return of {round(market_return,2)}%, making you an extra .....:')
     st.write(f'<p class="big-font">${round(extra,2)}</p>', unsafe_allow_html=True)
 
 
