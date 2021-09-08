@@ -11,8 +11,8 @@ try:
     from urllib.request import urlopen
 except ImportError:
     # Fall back to Python 2's urllib2
-    from urllib2 import urlopen
-import json
+
+    import json
 from multiapp import MultiApp
 from apps import home, past_performance, prediction # import your app modules here
 
@@ -36,8 +36,9 @@ st.set_page_config(
 app = MultiApp()
 # Add all your application here
 app.add_app("Home", home.app)
-app.add_app("Past Performance", past_performance.app)
 app.add_app("Predict", prediction.app)
+app.add_app("Past Performance", past_performance.app)
+
 
 # The main app
 app.run()
@@ -98,7 +99,7 @@ app.run()
 #     past_performance = pd.read_csv('../cryptocurrency_trading/data/4-month-BTC-perf.csv')
 #     past_performance['date'] = pd.to_datetime(past_performance['date'])
 #     past_performance.sort_values(by="date", inplace = True)
-#     past_performance['date'] = past_performance['date'].dt.date 
+#     past_performance['date'] = past_performance['date'].dt.date
 #     past_performance.set_index('date', inplace = True)
 #     df = past_performance[past_performance.index >= start]
 #     df = df[df.index <= end].copy()
@@ -184,18 +185,17 @@ h1 {
 if st.checkbox('Inject CSS'):
     st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
 
-df = pd.DataFrame({
-          'first column': list(range(1, 11)),
-          'second column': np.arange(10, 101, 10)
-        })
+# df = pd.DataFrame({
+#           'first column': list(range(1, 11)),
+#           'second column': np.arange(10, 101, 10)
+#         })
 
 # this slider allows the user to select a number of lines
 # to display in the dataframe
 # the selected value is returned by st.slider
-line_count = st.slider('Select a line count', 1, 10, 3)
+# line_count = st.slider('Select a line count', 1, 10, 3)
 
-# and used in order to select the displayed lines
-head_df = df.head(line_count)
+# # and used in order to select the displayed lines
+# head_df = df.head(line_count)
 
-head_df
-
+# head_df

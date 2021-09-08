@@ -10,9 +10,8 @@ try:
     # For Python 3.0 and later
     from urllib.request import urlopen
 except ImportError:
-    # Fall back to Python 2's urllib2
-    from urllib2 import urlopen
-import json
+
+    import json
 
 
 
@@ -27,7 +26,7 @@ def get_past_data(start, end):
     past_performance = pd.read_csv('../cryptocurrency_trading/data/4-month-BTC-perf.csv')
     past_performance['date'] = pd.to_datetime(past_performance['date'])
     past_performance.sort_values(by="date", inplace = True)
-    past_performance['date'] = past_performance['date'].dt.date 
+    past_performance['date'] = past_performance['date'].dt.date
     past_performance.set_index('date', inplace = True)
     df = past_performance[past_performance.index >= start]
     df = df[df.index <= end].copy()
@@ -40,8 +39,11 @@ def get_earnings(investment, earnings,start):
     earnings['dif'] = earnings['pred'] - earnings['real']
     difference = initial_investment.append(earnings[['dif']])
     sum = difference.cumsum()
+    hold_df  = initial_investment.append(earnings[['real']])
+    hold = hold_df.cumsum()
     sum.columns = ['Bitcoin earnings']
     sum['No investment'] = investment
+    sum['Hold investment'] = hold
     st.markdown("""### Making money!""")
     st.write('These are your earnings if you used our model against just saving it!')
     st.line_chart(sum)
@@ -72,4 +74,3 @@ def app():
         get_earnings(investment, past_performance, start_date)
     else:
         st.error('Error: End date must fall after start date.')
-

@@ -1,19 +1,17 @@
 from pathlib import PureWindowsPath
 import streamlit as st
+import os
+from os import environ
+from dotenv import dotenv_values
 
 import numpy as np
 import pandas as pd
 from PIL import Image
 import datetime
 #!/usr/bin/env python
-try:
-    # For Python 3.0 and later
-    from urllib.request import urlopen
-except ImportError:
-    # Fall back to Python 2's urllib2
-    from urllib2 import urlopen
-import json
 
+from urllib.request import urlopen
+import json
 ### THIS WILL GO ON THE FIRST PAGe
 
 
@@ -27,19 +25,22 @@ def get_jsonparsed_data():
     -------
     dict
     """
-    url = ("https://financialmodelingprep.com/api/v3/quote/BTCUSD?apikey=a58413697e8263de9c95cab92049ea3f")
+    env_variables = dotenv_values(".env")
+    api_key = env_variables['FINANCIAL_MODELLING_API_KEY']
+    url = (f"https://financialmodelingprep.com/api/v3/quote/BTCUSD?apikey={api_key}")
     response = urlopen(url)
     data = response.read().decode("utf-8")
     return json.loads(data)
 
 def app():
 
-    st.markdown("""# Cryptocurrency trading!""")
-    st.write("""## We predict the movement in bitcoin price, taking into account sentiment analysis from reddit and twitter""")
-    st.write("""Do you wanna have a go yourself?""")
+    st.markdown("""# Smart Cryptocurrency Trading"""),
+    st.image('photos_frontend/Buy-Bitcoin.jpg')
+    st.write("""## Our platform predicts whether the next day price of Bitcoin will go Up ⬆️ or Down ⬇️, taking into account sentiment analysis from the social media websites, Reddit and Twitter.""")
+    st.write("""Do you wanna have a go yourself? Then navigate to the Predict page on the sidebar!""")
 
-    st.write('This page tells you some stuff about our model')
-
+    # st.write('This page tells you some stuff about our model')
+    st.write("""## Here is the latest BTC-USD Trading Price👇:""")
 
     # print(get_jsonparsed_data(url)[0]['price'])
     bitcoin_live_data = get_jsonparsed_data()[0]
@@ -57,4 +58,3 @@ def app():
     col2.metric("BITCOIN", f"${bitcoin_current_price}", f"{bitcoin_change}%")
     col3.metric("", "", "")
     # perhaps insert here the current value of bitcoin?
-
