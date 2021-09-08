@@ -4,19 +4,19 @@ from datetime import datetime
 from tqdm.notebook import tqdm
 from sklearn.impute import SimpleImputer
 import numpy as np
-import string 
+import string
 import datetime
 import transformers
 import torch
 import pandas as pd
 import numpy as np
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer
-from reddit_scrape import scrapping_posts, count_daily_posts
+from cryptocurrency_trading.reddit_scrape import scrapping_posts, count_daily_posts
 
 # Remove punctuation:
 def remove_punctuation(text):
     for punctuation in string.punctuation:
-        text = text.str.replace(punctuation, '') 
+        text = text.str.replace(punctuation, '')
     return text
 
 # All lower case:
@@ -40,10 +40,10 @@ def preprocesing(df, col_name):
 class SimpleDataset:
     def __init__(self, tokenized_texts):
         self.tokenized_texts = tokenized_texts
-    
+
     def __len__(self):
         return len(self.tokenized_texts["input_ids"])
-    
+
     def __getitem__(self, idx):
         return {k: v[idx] for k, v in self.tokenized_texts.items()}
 
@@ -70,7 +70,7 @@ def create_preddiction(pred_texts):
 
 def create_samples(df, start, end):
     #print(f'create_samples enter shape {df.shape}')
-    
+
     n_samples = 20
     df_sample_list = []
     dt_range = pd.date_range(start = start, end = end, freq='d')
@@ -90,7 +90,7 @@ def create_samples(df, start, end):
 def merge_sentiment_date(df_sentiment_analysis, df_useful, count_df):
     #df_useful = useful_only(df)
     df_sentiment_analysis = df_sentiment_analysis.merge(df_useful, how = 'inner').copy()
-    df_sentiment_analysis['pred'].replace(0,-1, inplace = True) 
+    df_sentiment_analysis['pred'].replace(0,-1, inplace = True)
     df_sentiment_analysis['real_score'] = df_sentiment_analysis['pred']*df_sentiment_analysis['score']
     df_per_day = df_sentiment_analysis.groupby(['date']).mean()[['real_score']]
     count_df['date'] = pd.to_datetime(count_df['date']).copy()
@@ -121,8 +121,3 @@ if __name__ == '__main__':
     start = datetime.datetime(2021, 9, 4)
     end = datetime.datetime(2021, 9, 5)
     all_reddit(start, end)
-
-    
-
-
-

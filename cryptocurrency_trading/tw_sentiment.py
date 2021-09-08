@@ -24,8 +24,9 @@ from dotenv import load_dotenv
 
 ##
 def scrape_tweets(start, end):
-    load_dotenv('.env')
-    token=os.getenv('tw_api')
+    token='AAAAAAAAAAAAAAAAAAAAAJ8YTQEAAAAAR%2B8NYfrSDA%2FfTiS%2BqPfuQNddR1Q%3D3AFeUskcjD6ppGdwHPh8WJBPkfgXIeZXpgjeiEJ5bbtkBCotKg'
+    # load_dotenv('.env')
+    # token=os.getenv('tw_api')
     dt_range = pd.date_range(start=start, end=end)
     dt_range = pd.DataFrame(dt_range, columns=['date'])
 
@@ -78,8 +79,9 @@ def scrape_tweets(start, end):
 
 
 def get_tweets_count(start, end):
-    load_dotenv('.env')
-    token=os.getenv('tw_api')
+    token = 'AAAAAAAAAAAAAAAAAAAAAJ8YTQEAAAAAR%2B8NYfrSDA%2FfTiS%2BqPfuQNddR1Q%3D3AFeUskcjD6ppGdwHPh8WJBPkfgXIeZXpgjeiEJ5bbtkBCotKg'
+    # load_dotenv('.env')
+    # token=os.getenv('tw_api')
     dt_range = pd.date_range(start=start, end=end)
     dt_range = pd.DataFrame(dt_range, columns=['date'])
 
@@ -236,5 +238,7 @@ def get_sentiment_and_count(start, end):
 
     results = pd.merge(df, df1, how='left', on='start')
     results=results.drop('end',axis=1)
+
+    results['start'] = pd.to_datetime(results['start'])
 
     return results
