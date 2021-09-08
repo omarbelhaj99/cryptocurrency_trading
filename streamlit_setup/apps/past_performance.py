@@ -33,23 +33,46 @@ def get_past_data(start, end):
     return df
 
 def get_earnings(investment, earnings,start):
-    yesterday  = start - datetime.timedelta(days=1)
-    initial_investment = pd.DataFrame([investment], index = [yesterday], columns = ['dif'])
+
+    ##### will not need this once model works:
     earnings.columns = ['pred', 'real']
-    earnings['dif'] = earnings['pred'] - earnings['real']
-    difference = initial_investment.append(earnings[['dif']])
-    sum = difference.cumsum()
-    hold_df  = initial_investment.append(earnings[['real']])
-    hold = hold_df.cumsum()
-    sum.columns = ['Bitcoin earnings']
-    sum['No investment'] = investment
-    sum['Hold investment'] = hold
+    earnings['pred'] = earnings[['real']].pct_change()#.dropna(axis = 1)
+
+
+    #############################################     KEEP THIS     ###########################################
+    earnings['buy_sell'] = earnings['pred']>0
+    earnings['pct'] = earnings['pred']+1
+    earnings.dropna()
+    ac_ = []
+    for inx, row in earnings.iterrows():
+        if row['buy_sell'] == True:
+            ac_.append(row['pct'])
+        else:
+            ac_.append(1)
+    earnings['prepare'] = ac_
+    earnings['market'] = earnings['pct'].cumprod()
+    earnings['acc_return'] = earnings['prepare'].cumprod()
     st.markdown("""### Making money!""")
-    st.write('These are your earnings if you used our model against just saving it!')
-    st.line_chart(sum)
-    last_money = sum.iloc[-1:,:]
-    extra_cash = last_money['Bitcoin earnings'] - last_money['No investment']
-    st.write(f"If you used our model instead of just saving it you woul've made an extra: ${extra_cash.values[0]}")
+    st.write('These are your earnings if you used our model against just investing and holding!!!')
+    plot_ = earnings[['market', 'acc_return']]
+    plot_.columns = ['Invest and hold', 'Return with our model']
+    st.line_chart(plot_)
+    our_return = earnings[earnings['buy_sell']]['pct'].prod()
+    market_return = earnings['pct'].prod()
+    extra = our_return*investment - market_return*investment
+    
+    st.write("""
+        <style>
+        .big-font {
+            font-size:50px !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+    st.write(f'If you used our model you will get a return of {our_return}%, instead of just holding it, which would have given you a return of {market_return}%, making you an extra .....:')
+    st.write(f'<p class="big-font">${round(extra,2)}</p>', unsafe_allow_html=True)
+
+
 
 def app():
     st.markdown("""# Past performance """)
@@ -59,18 +82,18 @@ def app():
 
     # Ask for innitial investment:
     st.markdown("""### Let's Invest some money!""")
-    investment = st.slider('How much money are we investing?', 100, 1000, 10)
+    investment = st.slider('How much money are we investing?', 100, 5000, 100)
     st.write(' ')
     st.write('Select a time period to invest!')
     min_start = datetime.datetime(2021, 5, 3)
     max_value = datetime.datetime(2021, 9, 7)
     start_date = st.date_input('Start date', min_start, min_value = min_start, max_value = max_value)
     end_date = st.date_input('End date', max_value, min_value  = min_start+datetime.timedelta(days=1), max_value = max_value)
+    
 
     if start_date < end_date:
-        #st.success('Start date: `%s`\n\nEnd date: `%s`' % (start_date, end_date))
         past_performance = get_past_data(start_date, end_date)
-        plot_bitcoin_change(past_performance)
+        #plot_bitcoin_change(past_performance)
         get_earnings(investment, past_performance, start_date)
     else:
         st.error('Error: End date must fall after start date.')
