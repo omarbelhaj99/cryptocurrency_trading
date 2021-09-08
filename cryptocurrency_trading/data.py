@@ -32,14 +32,8 @@ def get_all_data(start_date,end_date):
     reddit_data = all_reddit(start_date, end_date)
     tech_data = all_tech_analysis(df_sorted)
     twitter_data=get_sentiment_and_count(start,end)
-    final_data = pd.merge(twitter_data,
-                          tech_data,
-                          how='left',
-                          left_on='start',
-                          right_on='date')
-    final_data = pd.merge(final_data,
-                          reddit_data,
-                          how='left',
-                          left_on='start',
-                          right_on='date')
-    return final_data
+    results=pd.merge(reddit_data,twitter_data,left_on='date',right_on='start').copy().drop('start',axis=1)
+    final=pd.merge(results,tech_data, how='inner').copy()
+
+    ##UPDATED DON'T CHANGE
+    return final
