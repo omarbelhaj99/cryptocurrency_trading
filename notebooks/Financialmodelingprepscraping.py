@@ -11,7 +11,7 @@ import pandas as pd
 # In[2]:
 
 
-api_key='a58413697e8263de9c95cab92049ea3f'
+api_key=''
 symbol='BTCUSD'
 query=f'https://financialmodelingprep.com/api/v3/historical-price-full/{symbol}?apikey={api_key}'
 
