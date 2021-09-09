@@ -37,3 +37,7 @@ torch
 
 pillow
 urllib3
+
+# for the tech analysis
+pandas_datareader
+yfinance

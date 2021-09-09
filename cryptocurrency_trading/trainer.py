@@ -57,7 +57,7 @@ def prepare_data(start_date,end_date, mean, std):
 def predict_price(start_date,end_date):
     load_dotenv('.env')
     # path_to_model = "lstm_gru_7_9"
-    path_to_model = '../cryptocurrency_trading/lstm_gru_7_9'
+    path_to_model = 'cryptocurrency_trading/lstm_gru_7_9'
     mean = -7.65705661641187e-05
     standard_deviation = 0.06080495335661146
     dataset_predict = prepare_data(start_date,end_date, mean, standard_deviation)

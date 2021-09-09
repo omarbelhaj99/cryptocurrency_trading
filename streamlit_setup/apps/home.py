@@ -35,7 +35,7 @@ def get_jsonparsed_data():
 def app():
 
     st.markdown("""# Smart Cryptocurrency Trading"""),
-    st.image('photos_frontend/Buy-Bitcoin.jpg')
+    st.image('https://res.cloudinary.com/dbxctsqiw/image/upload/v1631179116/699-cryptocurrency/Buy-Bitcoin_aciwoa.jpg')
     st.write("""## Our platform predicts whether the next day price of Bitcoin will go Up ⬆️ or Down ⬇️, taking into account sentiment analysis from the social media websites, Reddit and Twitter.""")
     st.write("""Do you wanna have a go yourself? Then navigate to the Predict page on the sidebar!""")
 

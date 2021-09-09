@@ -23,7 +23,7 @@ def plot_bitcoin_change(df):
 
 def get_past_data(start, end):
     #obtain past csv data
-    past_performance = pd.read_csv('../cryptocurrency_trading/data/4-month-BTC-perf.csv')
+    past_performance = pd.read_csv('cryptocurrency_trading/data/4-month-BTC-perf.csv')
     past_performance['date'] = pd.to_datetime(past_performance['date'])
     past_performance.sort_values(by="date", inplace = True)
     past_performance['date'] = past_performance['date'].dt.date
