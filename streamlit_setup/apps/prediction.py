@@ -33,6 +33,8 @@ def app():
     st.write("### You've invested in crypto?? We tell you what to do with your money!")
     st.write("I would trust us, our model is more accurate than you!!")
 
+
+
     if st.button('Show me what to do with my money!'):
         # print is visible in the server output, not in the page
         print('The model will tell you what to do')
@@ -54,3 +56,13 @@ def app():
 
     else:
         st.write('Will it be sell or buy!! Go on find out!')
+
+    
+    st.write("### What happens when you press this button??")
+    st.write("""1️⃣ We will scrape reddit, and call the twitter and finance API to get the LIVE data and posts""")
+    st.write("""    (And clean all of this data on real time!)""")
+    st.write("""2️⃣ Perform sentiment analysis on reddit and twitter posts to get a sentiment score""")
+    st.write("""3️⃣ Analyse our price data to obtain technical features""")
+    st.write("""4️⃣ Feed this data into a Deep Learning model to obtain the price prdiction for tomorrow""")
+    st.write("""5️⃣ From our prediction decide to sell or buy!""")
+    
