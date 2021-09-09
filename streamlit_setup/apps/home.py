@@ -26,7 +26,8 @@ def get_jsonparsed_data():
     dict
     """
     env_variables = dotenv_values(".env")
-    api_key = env_variables['FINANCIAL_MODELLING_API_KEY']
+    api_key = "4d3008e3afccc66761f2d3aafe53f297"
+#    api_key = env_variables['FINANCIAL_MODELLING_API_KEY']
     url = (f"https://financialmodelingprep.com/api/v3/quote/BTCUSD?apikey={api_key}")
     response = urlopen(url)
     data = response.read().decode("utf-8")

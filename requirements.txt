@@ -34,10 +34,13 @@ transformers
 torch
 
 # For frontend
-
+streamlit
 pillow
 urllib3
 
 # for the tech analysis
 pandas_datareader
 yfinance
+
+python-dotenv
+seaborn
