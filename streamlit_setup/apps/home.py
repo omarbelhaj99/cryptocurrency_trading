@@ -35,7 +35,7 @@ def get_jsonparsed_data():
 def app():
 
     st.markdown("""# Smart Cryptocurrency Trading"""),
-    st.image('photos_frontend/Buy-Bitcoin.jpg')
+    st.image('https://res.cloudinary.com/dbxctsqiw/image/upload/v1631179116/699-cryptocurrency/Buy-Bitcoin_aciwoa.jpg')
     st.write("""## Our platform predicts whether the next day price of Bitcoin will go Up ⬆️ or Down ⬇️, taking into account sentiment analysis from the social media websites, Reddit and Twitter.""")
     st.write("""Do you wanna have a go yourself? Then navigate to the Predict page on the sidebar!""")
 
@@ -55,6 +55,6 @@ def app():
 
     col1, col2, col3 = st.columns(3)
     col1.metric("", "", "")
-    col2.metric("BITCOIN", f"${bitcoin_current_price}", f"{bitcoin_change}%")
+    col2.metric("BITCOIN", f"${round(bitcoin_current_price,3)}", f"{round(bitcoin_change,2)}%")
     col3.metric("", "", "")
     # perhaps insert here the current value of bitcoin?
