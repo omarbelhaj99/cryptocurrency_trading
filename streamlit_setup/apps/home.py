@@ -26,8 +26,7 @@ def get_jsonparsed_data():
     dict
     """
     env_variables = dotenv_values(".env")
-    api_key = "4d3008e3afccc66761f2d3aafe53f297"
-#    api_key = env_variables['FINANCIAL_MODELLING_API_KEY']
+    api_key = env_variables['FINANCIAL_MODELLING_API_KEY']
     url = (f"https://financialmodelingprep.com/api/v3/quote/BTCUSD?apikey={api_key}")
     response = urlopen(url)
     data = response.read().decode("utf-8")
@@ -56,6 +55,6 @@ def app():
 
     col1, col2, col3 = st.columns(3)
     col1.metric("", "", "")
-    col2.metric("BITCOIN", f"${bitcoin_current_price}", f"{bitcoin_change}%")
+    col2.metric("BITCOIN", f"${round(bitcoin_current_price,3)}", f"{round(bitcoin_change,2)}%")
     col3.metric("", "", "")
     # perhaps insert here the current value of bitcoin?

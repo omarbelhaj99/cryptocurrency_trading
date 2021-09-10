@@ -16,11 +16,19 @@ from cryptocurrency_trading import trainer
 
 
 def obtain_prediction(start_date, end_date):
-    st.write('predicting')
     y_pred = trainer.predict_price(start_date,end_date)
     buy = y_pred>0
     return buy
 
+def explanation():
+    st.write("")
+    st.write("### What happens when you press this button??")
+    st.write("""1️⃣ We will scrape reddit, and call the twitter and finance API to get the LIVE data and posts""")
+    st.write("""    (And clean all of this data on real time!)""")
+    st.write("""2️⃣ Perform sentiment analysis on reddit and twitter posts to get a sentiment score""")
+    st.write("""3️⃣ Analyse our price data to obtain technical features""")
+    st.write("""4️⃣ Feed this data into a Deep Learning model to obtain the price prdiction for tomorrow""")
+    st.write("""5️⃣ From our prediction decide to sell or buy!""")
 
 def app():
     # end = datetime.date.today()
@@ -40,12 +48,14 @@ def app():
         # st.write('Further clicks are not visible but are executed')
         buy = obtain_prediction(start, end)
         if buy == 1:
-            say = 'buy'
-            image = st.image('https://res.cloudinary.com/dbxctsqiw/image/upload/v1631179116/699-cryptocurrency/Buy-Bitcoin_aciwoa.jpg', caption='Our recommendation!!')
+            st.balloons()
+            say = 'BUY'
+            image = st.image('https://res.cloudinary.com/dtksts7rh/image/upload/bo_1px_solid_rgb:000,r_0/v1631199584/buy-bitcoin_gfhplj.jpg', caption='BUY BITCOIN!')
+            # old image:#image = st.image('https://res.cloudinary.com/dbxctsqiw/image/upload/v1631179116/699-cryptocurrency/Buy-Bitcoin_aciwoa.jpg', caption='BUY BITCOIN!')
         else:
-            say = 'sell'
-            image = st.image('https://res.cloudinary.com/dbxctsqiw/image/upload/v1631179116/699-cryptocurrency/sell-bitcoin_ysvl9r.jpg', caption='Our recommendation!!')
-        #st.image(image, caption='Our recommendation!!')
+            say = 'SELL'
+            st.balloons()
+            image = st.image('https://res.cloudinary.com/dbxctsqiw/image/upload/v1631179116/699-cryptocurrency/sell-bitcoin_ysvl9r.jpg', caption='SELL BITCOIN!')
         st.write(f"RUN!!! go {say} bitcoin!!!! Tomorrow you will have more money💰💰💰")
         st.write('')
         st.write('If you need a little more information to trust us go ahead to our Past Performance window and check our our previous success 😉')
@@ -54,3 +64,6 @@ def app():
 
     else:
         st.write('Will it be sell or buy!! Go on find out!')
+    explanation()
+
+    

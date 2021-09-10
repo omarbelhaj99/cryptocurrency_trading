@@ -60,7 +60,9 @@ def get_earnings(investment, earnings,start):
     our_return = earnings[earnings['buy_sell']]['pct'].prod()
     market_return = earnings['pct'].prod()
     extra = ((our_return/100)+1)*investment #- ((market_return/100)+1)*investment
-    
+    profit_model = extra - investment
+    profit_market = ((market_return/100)+1)*investment - investment
+
     st.write("""
         <style>
         .big-font {
@@ -69,8 +71,11 @@ def get_earnings(investment, earnings,start):
         </style>
         """, unsafe_allow_html=True)
 
-    st.write(f'If you used our model you will get a return of {round(our_return,2)}%, instead of just holding it, which would have given you a return of {round(market_return,2)}%, making you an extra .....:')
-    st.write(f'<p class="big-font">${round(extra,2)}</p>', unsafe_allow_html=True)
+    st.write(f'If you used our model you will get a profit of ${round(profit_model,2)}, instead of just holding it, which would have given you a profit of ${round(profit_market,2)}')
+    #st.write(f'If you used our model you will get a return of {round(our_return,2)}%, instead of just holding it, which would have given you a return of {round(market_return,2)}%')
+    st.write('You now have:')
+    st.write(f'<p class="big-font">$         {round(extra,2)}            </p>', unsafe_allow_html=True)
+    st.write("Looks like you should've invested more money! 😉")
 
 
 
@@ -97,3 +102,7 @@ def app():
         get_earnings(investment, past_performance, start_date)
     else:
         st.error('Error: End date must fall after start date.')
+
+
+
+## Exlain buy and sell everyday 
