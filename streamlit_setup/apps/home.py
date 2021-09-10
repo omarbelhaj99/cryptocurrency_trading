@@ -55,6 +55,6 @@ def app():
 
     col1, col2, col3 = st.columns(3)
     col1.metric("", "", "")
-    col2.metric("BITCOIN", f"${bitcoin_current_price}", f"{bitcoin_change}%")
+    col2.metric("BITCOIN", f"${round(bitcoin_current_price,3)}", f"{round(bitcoin_change,2)}%")
     col3.metric("", "", "")
     # perhaps insert here the current value of bitcoin?
