@@ -5,9 +5,9 @@ import os
 from os import environ
 from dotenv import dotenv_values
 
-from cryptocurrency_trading.red_sentiment import all_reddit
+from cryptocurrency_trading.reddit_preprocessing import all_reddit
 from cryptocurrency_trading.technical_analysis import all_tech_analysis
-from cryptocurrency_trading.tw_sentiment import get_sentiment_and_count
+from cryptocurrency_trading.twitter_preprocessing import get_sentiment_and_count
 
 
 def get_price_data():
