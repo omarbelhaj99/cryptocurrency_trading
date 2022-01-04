@@ -40,7 +40,7 @@ def converting_datetime(df):
     df['date'] = pd.to_datetime(df['date'].dt.date).copy()
     return df
 
-def concat_tittle_comment(df):
+def concat_title_comment(df):
     imputer = SimpleImputer(missing_values=np.nan, strategy='constant', fill_value = '')
     imputer2 = SimpleImputer(missing_values='[removed]', strategy='constant', fill_value = '')
     imputer3 = SimpleImputer(missing_values='[deleted]', strategy='constant', fill_value = '')
