@@ -78,7 +78,6 @@ def get_tweets_count(start, end):
     print(start)
     print(end)
 
-
     url = 'https://api.twitter.com/2/tweets/counts/all'
     header = {"Authorization": f"Bearer {token}"}
 
