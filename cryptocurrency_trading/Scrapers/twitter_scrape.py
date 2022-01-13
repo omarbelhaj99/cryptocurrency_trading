@@ -6,7 +6,7 @@ import os
 import requests
 import pandas as pd
 from datetime import datetime
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 import time
 from dotenv import load_dotenv
 
@@ -67,7 +67,7 @@ def scrape_tweets(start, end):
 
 #scrapping tweets_count
 
-def get_tweets_count(start, end):
+def get_tweet_count(start, end):
     load_dotenv('.env')
     token=os.getenv('tw_api')
     dt_range = pd.date_range(start = start, end = end)
